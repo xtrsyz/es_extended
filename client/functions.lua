@@ -483,6 +483,13 @@ ESX.Game.GetPlayers = function(onlyOtherPlayers, returnKeyValue, returnPeds)
 	return players
 end
 
+ESX.Game.GetHashKey = function(modelName)
+	if type(modelName) ~= "number" then
+		modelName = GetHashKey(modelName)
+	end
+	return modelName
+end
+
 ESX.Game.GetClosestObject = function(coords, modelFilter) return ESX.Game.GetClosestEntity(ESX.Game.GetObjects(), false, coords, modelFilter) end
 ESX.Game.GetClosestPed = function(coords, modelFilter) return ESX.Game.GetClosestEntity(ESX.Game.GetPeds(true), false, coords, modelFilter) end
 ESX.Game.GetClosestPlayer = function(coords) return ESX.Game.GetClosestEntity(ESX.Game.GetPlayers(true, true), true, coords, nil) end
@@ -493,6 +500,26 @@ ESX.Game.IsSpawnPointClear = function(coords, maxDistance) return #ESX.Game.GetV
 
 ESX.Game.GetClosestEntity = function(entities, isPlayerEntities, coords, modelFilter)
 	local closestEntity, closestEntityDistance, filteredEntities = -1, -1, nil
+
+	if coords and not coords.x then
+		local _modelFilter = modelFilter
+		modelFilter = coords
+		coords = _modelFilter
+	end
+
+	if modelFilter then
+		local filter = {}
+		if type(modelFilter) == 'string' then
+			if modelFilter ~= '' then
+				filter[ESX.Game.GetHashKey(modelFilter)] = modelFilter
+			end
+		elseif type(modelFilter) == 'table' then
+			for _,model in pairs(modelFilter) do
+				filter[ESX.Game.GetHashKey(model)] = model
+			end
+		end
+		modelFilter = filter
+	end
 
 	if coords then
 		coords = vector3(coords.x, coords.y, coords.z)
