@@ -605,9 +605,9 @@ ESX.Game.GetVehicleProperties = function(vehicle)
 				IsVehicleNeonLightEnabled(vehicle, 3)
 			},
 
-			neonColor         = table.pack(GetVehicleNeonLightsColour(vehicle)),
+			neonColor         = ofTable(GetVehicleNeonLightsColour(vehicle)),
 			extras            = extras,
-			tyreSmokeColor    = table.pack(GetVehicleTyreSmokeColor(vehicle)),
+			tyreSmokeColor    = ofTable(GetVehicleTyreSmokeColor(vehicle)),
 
 			modSpoilers       = GetVehicleMod(vehicle, 0),
 			modFrontBumper    = GetVehicleMod(vehicle, 1),
